@@ -1,4 +1,4 @@
-from model.handlers_cor import PipelineClassificacao
+from model.pipeline import PipelineClassificacao
 from model.gerenciador_bd import GerenciadorBD
 from view.view import View
 

@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from tkinter import ttk
 from tkinter import messagebox
+import sys
 
 class View:
     def __init__(self, controller):
@@ -47,12 +48,12 @@ class View:
         self.btn_cadastro.place(relx=0.5, rely=0.5, anchor="n")
 
         # Criando o botão de lista de atletas
-        self.btn_cadastro = tk.Button(self.root, text="Lista de Atletas", font=("Arial", 18, "bold"), bg="#B4460F", width=26, height=1, command=lambda: self.trocar_tela(self.lista_atletas))
-        self.btn_cadastro.place(relx=0.5, rely=0.6, anchor="n")
+        self.btn_lista = tk.Button(self.root, text="Lista de Atletas", font=("Arial", 18, "bold"), bg="#B4460F", width=26, height=1, command=lambda: self.trocar_tela(self.lista_atletas))
+        self.btn_lista.place(relx=0.5, rely=0.6, anchor="n")
 
         # Criando o botão de sair
-        self.btn_cadastro = tk.Button(self.root, text="Sair", font=("Arial", 18, "bold"), bg="#B4460F", width=26, height=1)
-        self.btn_cadastro.place(relx=0.5, rely=0.7, anchor="n")
+        self.btn_sair = tk.Button(self.root, text="Sair", font=("Arial", 18, "bold"), bg="#B4460F", width=26, height=1, command=lambda: self.close())
+        self.btn_sair.place(relx=0.5, rely=0.7, anchor="n")
 
         # criando imagem
         imagem = Image.open("img/bola.png") #diretório da imagem
@@ -259,7 +260,7 @@ class View:
         self.atualizar_treeview(resultados)
 
     def adicionar_atleta(self, ):
-        
+
         # Pega os valores da carta
         nome = self.entryNome.get()
         altura = self.entryAltura.get()
@@ -274,6 +275,7 @@ class View:
         resultado = self.controller.validar_entrada_view(nome, [peso, altura, altura_tc, flexibilidade, abdominal, forca, salto_horizontal, salto_vertical])
         if resultado:
             messagebox.showinfo("Sucesso", f"Atleta classificado como: {resultado}")
+            self.limpar_campos()
         else:
             messagebox.showerror("Erro", "Erro na classificação do atleta.")
 
@@ -298,4 +300,24 @@ class View:
             # Atualiza o comando do cabeçalho para alternar a ordem na próxima vez
         tv.heading(col, command=lambda: self.treeview_ordenacao(tv, col, not reverse))
 
-            
+    def limpar_campos(self):
+        self.entradas = [
+        self.entryAltura, 
+        self.entryPeso, 
+        self.entryFlexibilidade, 
+        self.entryForca, 
+        self.entryAbdominal, 
+        self.entrySalto_horizontal, 
+        self.entrySalto_vertical, 
+        self.entryAlturaTC
+        ]
+    
+        # Limpa o campo de nome
+        self.entryNome.delete(0, tk.END)
+        
+        # Limpa os campos numéricos (sua lista self.entradas)
+        for ent in self.entradas:
+            ent.delete(0, tk.END)
+
+    def close(self):
+        sys.exit()
